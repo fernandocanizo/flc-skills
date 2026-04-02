@@ -32,13 +32,12 @@ Save the branch name — it will be used for the report filename.
 ### Step 2 — Find the base commit
 
 ```bash
-MERGE_COMMIT=$(git log --oneline | grep "Merge pull request" | head -n 1 | cut -d' ' -f1)
-echo "Last merge commit: $MERGE_COMMIT"
+.claude/skills/flc-rocky-reviewer/scripts/find-first-merge-commit.sh
 ```
 
-This is the last PR that landed on `dev` before this branch started. It is used directly as the diff base — no parent navigation needed.
+This script prints the hash of the last "Merge pull request" commit, which is the last PR that landed on `dev` before this branch started. It is used directly as the diff base — no parent navigation needed. Save the printed hash as `MERGE_COMMIT`.
 
-> **Note:** If the repo uses a different merge message format (not "Merge pull request"), adjust the `grep` pattern accordingly.
+> **Note:** If the repo uses a different merge message format (not "Merge pull request"), adjust the `grep` pattern inside the script accordingly.
 
 ### Step 3 — Get the file list
 
@@ -79,7 +78,7 @@ For each file in the list:
 
 ### Step 5 — Write the report
 
-Save to: `.claude/flc-reviews/<branch-name>.md`
+Write the report directly to `.claude/flc-reviews/<branch-name>.md` without asking for confirmation. When done, tell the user the report is ready and its path. Do not summarize the findings inline — the file is the output.
 
 **Format:**
 
