@@ -48,24 +48,14 @@ git diff-tree --no-commit-id --name-only -r ${MERGE_COMMIT}..HEAD
 
 `MERGE_COMMIT..HEAD` = all files changed going from the merge base to the tip of the current branch. Save this list — these are the files to review.
 
-### Step 4 — First pass (automated tools)
-
-Run `react-doctor` for a high-level React-specific scan:
-
-```bash
-pnpm dlx react-doctor@latest . --verbose --diff
-```
-
-Note any errors or score degradation — include these findings in the report under a **Automated Scan** section.
-
 > **If you are making code changes during or after this review (not just reading):**
-> At the end of each batch of changes, also run:
+> At the end of each batch of changes, run:
 > - `pnpm check:types` — TypeScript strict mode
 > - `pnpm check:locales` — validates translation completeness across en/es/pt
 > - `pnpm check:lint` — Biome linting
 > These are covered by git hooks on commit, but running them mid-session catches issues earlier.
 
-### Step 5 — Per-file deep analysis
+### Step 4 — Per-file deep analysis
 
 For each file in the list:
 
@@ -87,7 +77,7 @@ For each file in the list:
    - Forms must support implicit Enter submission
 5. **Cascade** — if a file imports from or delegates to another module that looks suspect, read that module too and include it in the analysis. Document which files were added via cascade vs. the original list.
 
-### Step 6 — Write the report
+### Step 5 — Write the report
 
 Save to: `.claude/flc-reviews/<branch-name>.md`
 
@@ -98,12 +88,6 @@ Save to: `.claude/flc-reviews/<branch-name>.md`
 **Date:** <date>
 **Files in changeset:** <N> original + <M> cascaded
 **Total issues:** <N> CRITICAL / <N> WARNING / <N> SUGGESTION
-
----
-
-## Automated Scan
-
-<react-doctor output summary>
 
 ---
 
