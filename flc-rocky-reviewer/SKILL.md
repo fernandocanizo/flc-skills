@@ -54,11 +54,20 @@ git diff-tree --no-commit-id --name-only -r ${MERGE_COMMIT}..HEAD
 > - `pnpm check:lint` — Biome linting
 > These are covered by git hooks on commit, but running them mid-session catches issues earlier.
 
+### Step 3b — Graph-assisted triage (code-review-graph)
+
+Before reading any files, run two graph tools to get a risk-scored overview:
+
+1. **`detect_changes`** — pass the commit range `${MERGE_COMMIT}..HEAD`. This returns a risk-scored list of changed nodes (functions, components, modules). Use the scores to prioritize which files deserve the closest scrutiny.
+2. **`get_impact_radius`** — for any node flagged HIGH risk by `detect_changes`, check its blast radius. This surfaces hidden dependents that the cascade step (Step 4.5) might otherwise miss.
+
+These tools are fast and token-cheap. Do not skip them — they inform the order and depth of Step 4.
+
 ### Step 4 — Per-file deep analysis
 
-For each file in the list:
+For each file in the list (ordered by risk score from Step 3b, highest first):
 
-1. **Read the full file** — not a snippet, the whole thing
+1. **Use `get_review_context`** to get source snippets for the file — this is the default. Fall back to reading the full file only when the snippet is insufficient for a confident review judgment.
 2. **Invoke the `code-simplifier` agent** — focuses on clarity, consistency, and maintainability
 3. **Apply systematic-debugging mindset** — look for:
    - Data flow assumptions that could break silently
