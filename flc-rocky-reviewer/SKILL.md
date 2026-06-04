@@ -87,7 +87,7 @@ For each file in the list (ordered by risk score from Step 3b, highest first):
 
 ### Step 5 — Write the report
 
-Write the report directly to `.claude/flc-reviews/<branch-name>.md` without asking for confirmation. When done, tell the user the report is ready and its path. Do not summarize the findings inline — the file is the output.
+Write the report directly to `.claude/flc-reviews/<branch-name>.md` without asking for confirmation and without creating the folder, it's already there. Only attempt to create the folder if writing the report fails. When done, tell the user the report is ready and its path. Do not summarize the findings inline — the file is the output.
 
 **Format:**
 
