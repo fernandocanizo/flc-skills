@@ -63,6 +63,16 @@ Before reading any files, run two graph tools to get a risk-scored overview:
 
 These tools are fast and token-cheap. Do not skip them — they inform the order and depth of Step 4.
 
+### Step 3c — URL search param audit
+
+If any changed file reads or writes URL search params (`searchParams.get/getAll/.has()`, `params.append/set()`, `URLSearchParams`, or link `?key=value` construction), check each param name against this catalog:
+
+`alarmed`, `bound`, `byStat`, `clone`, `dateFromPlot`, `dateToPlot`, `endDate`, `find`, `generation`, `handler`, `ht`, `inc_interval`, `inc_range`, `inc_ts_from`, `inc_ts_to`, `interval`, `isBillingRead`, `isClient`, `isDemandRead`, `isRegexp`, `isTenant`, `lat`, `limit`, `listener`, `login`, `long`, `password-reset`, `read_interval`, `read_ts_from`, `read_ts_to`, `return-to`, `role`, `selectedGroupId`, `session-expired`, `skip`, `sort`, `startDate`, `stat`, `state`, `tenant`, `ts`, `up`, `usagePlan`, `z`
+
+For any param **not** in this list (new param) or that looks misused (wrong reader, wrong writer, wrong route): read `doc/url-search-parameters.md` for the full contract and add a finding.
+
+---
+
 ### Step 4 — Per-file deep analysis
 
 For each file in the list (ordered by risk score from Step 3b, highest first):
