@@ -71,6 +71,8 @@ If any changed file reads or writes URL search params (`searchParams.get/getAll/
 
 For any param **not** in this list (new param) or that looks misused (wrong reader, wrong writer, wrong route): read `doc/url-search-parameters.md` for the full contract and add a finding.
 
+If the param is new and `doc/url-search-parameters.md` has no entry for it: raise a **CRITICAL** finding — every new URL search param must be documented in that file before (or in the same PR as) the route that consumes it.
+
 ---
 
 ### Step 4 — Per-file deep analysis
