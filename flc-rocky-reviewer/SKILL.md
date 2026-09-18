@@ -87,6 +87,8 @@ For each file in the list (ordered by risk score from Step 3b, highest first):
    - Error paths that are swallowed or ignored
    - Loader/action patterns that diverge from how the rest of the app does similar things
    - Missing or incorrect TypeScript types (especially `any`, untyped GraphQL responses)
+   - Truthy-empty-array bugs: `[]` is truthy, so `arr ?? default`, `arr || default`, `if (arr)`, `arr ? a : b`, and `!arr` never fall through for an empty-but-defined array. The only correct check is `.length` (e.g. `arr.length ? arr : default`, `!arr.length`).
+   - Same bug for objects (`{}` is also truthy) — but there's no single universal check like `.length`. Flag any `obj ?? default` / `if (obj)` / `!obj` guarding "has data" and confirm it actually checks `Object.keys(obj).length` (or `.values`/`.entries`), not just truthiness.
 4. **Check Rocky-specific patterns:**
    - GraphQL queries must use `getGqlFetcher` — no raw fetch calls to the backend
    - No client-side state management libraries (no Redux, Zustand, etc.) — Remix loaders/actions only
